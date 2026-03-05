@@ -50,6 +50,7 @@ An intelligent PDF book assistant that understands document structure - chapters
 Create a .env file in the project root. Paste this in .env file with key
 
 GROQ_API_KEY=your_groq_api_key_here
+
 GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 

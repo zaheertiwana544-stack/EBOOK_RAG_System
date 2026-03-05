@@ -23,6 +23,10 @@ An intelligent PDF book assistant that understands document structure - chapters
 - Git
 - A [Groq API key](https://console.groq.com/keys) (free tier available)
 
+ **SCREENSHOT**
+
+<img width="1336" height="546" alt="image" src="https://github.com/user-attachments/assets/1f875a38-a984-4d23-9e9a-ea41032a231b" />
+
 ### Step 1: Clone the Repository
 
 ```bash
@@ -37,7 +41,3 @@ Windows:
 
 
 
-
- **SCREENSHOT**
-
-<img width="1336" height="546" alt="image" src="https://github.com/user-attachments/assets/1f875a38-a984-4d23-9e9a-ea41032a231b" />

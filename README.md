@@ -35,10 +35,9 @@ An intelligent PDF book assistant that understands document structure - chapters
 
 
 ### Step 2: Create Virtual Environment
-
- Windows:
-     python -m venv myenv
-     myenv\Scripts\activate
+Windows:
+         python -m venv myenv
+         myenv\Scripts\activate
 Mac/Linux:
      python3 -m venv myenv
      source myenv/bin/activate

@@ -47,5 +47,5 @@ An intelligent PDF book assistant that understands document structure - chapters
       pip install -r requirements.txt
 
 ### Step 4: Set Up Environment Variables
-Create a .env file in the project root. Paste this in .env file with key \n
-GROQ_API_KEY=your_groq_api_key_here
+Create a .env file in the project root. Paste this in .env file with key
+  - GROQ_API_KEY=your_groq_api_key_here

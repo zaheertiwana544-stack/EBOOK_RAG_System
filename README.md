@@ -29,7 +29,7 @@ An intelligent PDF book assistant that understands document structure - chapters
 
 ### Step 1: Clone the Repository
 
-    ```bash
+    
      git clone https://github.com/zaheertiwana544-stack/EBOOK_RAG_System.git
      cd EBOOK_RAG_System
 

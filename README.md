@@ -34,10 +34,13 @@ git clone https://github.com/zaheertiwana544-stack/EBOOK_RAG_System.git
 cd EBOOK_RAG_System
 
 
-**Step 2: Create Virtual Environment**
+### **Step 2: Create Virtual Environment**
 Windows:
      python -m venv myenv
      myenv\Scripts\activate
+Mac/Linux:
 
+     python3 -m venv myenv
+     source myenv/bin/activate
 
 

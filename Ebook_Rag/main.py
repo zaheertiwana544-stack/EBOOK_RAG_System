@@ -1,5 +1,5 @@
 # =========================================
-# RAG CORE ENGINE (MAIN MODULE)
+# RAG ENGINE (CORE LOGIC ONLY)
 # =========================================
 
 import os
@@ -17,9 +17,6 @@ from langchain import hub
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 
-# ======================
-# LOAD ENV
-# ======================
 load_dotenv()
 
 # ======================
@@ -36,7 +33,7 @@ CHUNK_OVERLAP = 200
 # ======================
 # HELPERS
 # ======================
-def get_file_hash(file_path: str) -> str:
+def get_hash(file_path):
     with open(file_path, "rb") as f:
         return hashlib.sha256(f.read()).hexdigest()
 
@@ -66,10 +63,10 @@ def save_vectorstore(vs):
 
 
 # ======================
-# BUILD RAG SYSTEM
+# BUILD RAG
 # ======================
 def build_rag():
-    print("\n🚀 Initializing RAG System...")
+    print("🚀 Initializing RAG...")
 
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=CHUNK_SIZE,
@@ -80,21 +77,18 @@ def build_rag():
         model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
 
-    # Load existing
     vectorstore = load_vectorstore()
     hashes = load_hashes()
 
     if not os.path.exists(PDF_PATH):
-        raise FileNotFoundError(f"{PDF_PATH} not found")
+        raise FileNotFoundError("PDF not found")
 
-    file_hash = get_file_hash(PDF_PATH)
+    file_hash = get_hash(PDF_PATH)
 
     # ======================
-    # CHECK DUPLICATION
+    # CHECK IF ALREADY INDEXED
     # ======================
-    if file_hash in hashes and vectorstore:
-        print("✅ Using existing vector DB")
-    else:
+    if file_hash not in hashes or vectorstore is None:
         print("📄 Processing PDF...")
 
         loader = PyMuPDFLoader(PDF_PATH)
@@ -111,32 +105,22 @@ def build_rag():
         save_hashes(hashes)
         save_vectorstore(vectorstore)
 
-        print("✅ Vector DB updated")
+        print("✅ Vector DB created/updated")
+    else:
+        print("✅ Using cached vector DB")
 
-    # ======================
-    # RETRIEVER
-    # ======================
     retriever = vectorstore.as_retriever(search_kwargs={"k": 5})
 
-    # ======================
-    # LLM
-    # ======================
     llm = ChatGroq(
         model_name="llama-3.3-70b-versatile",
         groq_api_key=os.getenv("GROQ_API_KEY")
     )
 
-    # ======================
-    # PROMPT
-    # ======================
     prompt = hub.pull("rlm/rag-prompt")
 
     def format_docs(docs):
-        return "\n\n".join(doc.page_content for doc in docs)
+        return "\n\n".join(d.page_content for d in docs)
 
-    # ======================
-    # RAG CHAIN
-    # ======================
     rag_chain = (
         {
             "context": retriever | format_docs,
@@ -147,26 +131,5 @@ def build_rag():
         | StrOutputParser()
     )
 
-    print("✅ RAG System Ready!\n")
+    print("✅ RAG READY")
     return rag_chain
-
-
-# ======================
-# CLI TEST MODE
-# ======================
-if __name__ == "__main__":
-    rag_chain = build_rag()
-
-    print("=" * 50)
-    print("📚 RAG CHAT SYSTEM (CLI MODE)")
-    print("=" * 50)
-
-    while True:
-        q = input("\nAsk question (or 'exit'): ")
-
-        if q.lower() in ["exit", "quit"]:
-            break
-
-        response = rag_chain.invoke(q)
-        print("\n💡 Answer:\n", response)
-        print("-" * 50)
